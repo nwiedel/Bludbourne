@@ -2,7 +2,9 @@ package com.nicolas.bludbourne;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -39,6 +41,7 @@ public class Utility {
         return assetManager.isLoaded(fileName);
     }
 
+    /* läd eine tiledmap */
     public static void loadMapAssets(String mapFilenamePath){
         if(mapFilenamePath == null || mapFilenamePath.isEmpty()){
             return;
@@ -58,10 +61,11 @@ public class Utility {
         }
     }
 
+    /* getter für tiledmap */
     public static TiledMap getMapAsset(String mapFilenamePath){
         TiledMap map = null;
 
-        // once the assetManager is done loading
+        // once the assetManager has done loading
         if(assetManager.isLoaded(mapFilenamePath)){
             map = assetManager.get(mapFilenamePath, TiledMap.class);
         } else {
@@ -70,5 +74,35 @@ public class Utility {
         return map;
     }
 
-    
+    /* läd texture assets */
+    public static void loadTextureAsset(String textureFilenamePath){
+        if(textureFilenamePath == null || textureFilenamePath.isEmpty()){
+            return;
+        }
+        // load asset
+        if(filePathResolver.resolve(textureFilenamePath).exists()){
+            assetManager.setLoader(Texture.class, new TextureLoader(filePathResolver));
+
+            assetManager.load(textureFilenamePath, Texture.class);
+            // Until we add loading screen, just block until we load the texture
+            assetManager.finishLoadingAsset(textureFilenamePath);
+        }
+        else {
+            Gdx.app.debug(TAG, "Texture does not exist: " + textureFilenamePath);
+        }
+    }
+
+    /* getter für texture assets */
+    public static Texture getTextureAsset(String textureFilenamePath){
+        Texture texture = null;
+
+        // once asset manager has done loading
+        if (assetManager.isLoaded(textureFilenamePath)){
+            texture = assetManager.get(textureFilenamePath, Texture.class);
+        }
+        else {
+            Gdx.app.debug(TAG, "Texture is not loaded: " + textureFilenamePath);
+        }
+        return texture;
+    }
 }
