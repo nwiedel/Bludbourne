@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.nicolas.bludbourne.Entity;
 import com.nicolas.bludbourne.MapManager;
 
 public class MainGameScreen implements Screen {
@@ -80,7 +81,7 @@ public class MainGameScreen implements Screen {
         player.update(delta);
         currentPlayerFrame = player.getFrame();
 
-        updatePortalLayerActivation(player.boundinBox);
+        updatePortalLayerActivation(player.boundingBox);
 
         if(!isCollisionWithMapLayer(player.boundingBox)){
             player.setNextPositionToCurrent();
@@ -172,7 +173,7 @@ public class MainGameScreen implements Screen {
         return false;
     }
 
-    private boolean updatePortalActivation(Rectangle boundingBox){
+    private boolean updatePortalLayerActivation(Rectangle boundingBox){
         MapLayer mapPortalLayer = mapMgr.getPortalLayer();
 
         if (mapPortalLayer == null){
@@ -189,7 +190,7 @@ public class MainGameScreen implements Screen {
                     if (mapName == null){
                         return false;
                     }
-                    mapMgr.setClosestStartPositionFromScaleUnits(player.getCurrentPosition());
+                    mapMgr.setClosestStartPositionFromScaledUnits(player.getCurrentPosition());
                     mapMgr.loadMap(mapName);
                     player.init(mapMgr.getPlayerStartUnitScaled().x, mapMgr.getPlayerStartUnitScaled().y);
                     mapRenderer.setMap(mapMgr.getCurrentMap());
