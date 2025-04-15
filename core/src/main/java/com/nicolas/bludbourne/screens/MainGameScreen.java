@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.nicolas.bludbourne.Entity;
 import com.nicolas.bludbourne.MapManager;
+import com.nicolas.bludbourne.PlayerController;
 
 public class MainGameScreen implements Screen {
 
@@ -61,7 +62,7 @@ public class MainGameScreen implements Screen {
 
         currentPlayerSprite = player.getFrameSprite();
 
-        comtroller = new PlayerController();
+        controller = new PlayerController(player);
         Gdx.input.setInputProcessor(controller);
     }
 
@@ -86,7 +87,7 @@ public class MainGameScreen implements Screen {
         if(!isCollisionWithMapLayer(player.boundingBox)){
             player.setNextPositionToCurrent();
         }
-        controller.update();
+        controller.update(delta);
 
         mapRenderer.setView(camera);
         mapRenderer.render();
